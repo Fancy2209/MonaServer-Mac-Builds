@@ -26,18 +26,16 @@ jobs:
       - uses: actions/checkout@master
 
       # Runs a single command using the runners shell
-      - name: Install Deps
-        run: brew install luajit --HEAD
 
       # Runs a set of commands using the runners shell
       - name: Build
         run: |
           git clone https://github.com/MonaSolutions/MonaServer2.git
           cd MonaServer2
-          make -j${nproc}
+          msbuild project.sln
 
       - name: Upload Artifact 
         uses: actions/upload-artifact@v4
         with: 
-          name: MonaServer-mac
+          name: MonaServer-Win
           path: MonaServer2/MonaServer
