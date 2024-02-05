@@ -41,6 +41,7 @@ jobs:
         with: 
           name: MonaServer-mac
           path: MonaServer2/MonaServer
+  
   build-win:
       # The type of runner that the job will run on
       runs-on: windows-latest
@@ -60,8 +61,8 @@ jobs:
         - name: Build
           run: |
             git clone https://github.com/MonaSolutions/MonaServer2.git
-            cd MonaServer2/MonaServer
-            msbuild project.sln
+            cd MonaServer2
+            msbuild Mona.sln
 
         - name: Upload Artifact 
           uses: actions/upload-artifact@v4
