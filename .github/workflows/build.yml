@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-mac-x64:
+  build-macOS-x64:
     runs-on: macos-12
 
     steps:
@@ -20,18 +20,22 @@ jobs:
 
       - name: Build
         run: |
-          git clone https://github.com/MonaSolutions/MonaServer2.git
           make -j${nproc}
-        working-directory: MonaServer2
 
       - name: Upload Artifact 
         uses: actions/upload-artifact@v4
         with: 
           name: MonaServer-macOS-x64
-          path: MonaServer2/MonaServer
+          path: MonaServer
+          
+      - name: Unit Tests
+        run: |
+          ./UnitTests
+          cat UnitTests.log/0.log
+        working-directory: UnitTests/
   
 
-  build-mac-m1:
+  build-macOS-m1:
     runs-on: macos-14
 
     steps:
@@ -42,18 +46,22 @@ jobs:
 
       - name: Build
         run: |
-          git clone https://github.com/MonaSolutions/MonaServer2.git
           make -j${nproc}
-        working-directory: MonaServer2
 
       - name: Upload Artifact 
         uses: actions/upload-artifact@v4
         with: 
           name: MonaServer-macOS-M1
-          path: MonaServer2/MonaServer
+          path: MonaServer
+
+      - name: Unit Tests
+        run: |
+          ./UnitTests
+          cat UnitTests.log/0.log
+        working-directory: UnitTests/
 
 
-  build-win:
+  build-windows:
       runs-on: windows-latest
 
       steps:
@@ -66,24 +74,23 @@ jobs:
 
         - name: Build
           run: |
-            git clone https://github.com/MonaSolutions/MonaServer2.git
-            
+            cd MonaServer2
             msbuild Mona.sln
 
         - name: Upload Artifact 
           uses: actions/upload-artifact@v4
           with: 
             name: MonaServer-Win
-            path: MonaServer2/MonaServer
+            path: MonaServer
 
         - name: Unit Tests
           run: |
             UnitTests.exe
             cat UnitTests.log/0.log
-          working-directory: MonaServer2/UnitTests/Debug/
+          working-directory: UnitTests/Debug/
           
 
-  build-lin:
+  build-linux:
         runs-on: ubuntu-latest
 
         steps:
@@ -98,17 +105,17 @@ jobs:
           - name: Build
             run: |
               git clone https://github.com/MonaSolutions/MonaServer2.git
-              
+              cd MonaServer2
               make -j${nproc}
 
           - name: Upload Artifact 
             uses: actions/upload-artifact@v4
             with: 
               name: MonaServer-Linux
-              path: MonaServer2/MonaServer
-          
+              path: MonaServer
+
           - name: Unit Tests
             run: |
               ./UnitTests
               cat UnitTests.log/0.log
-            working-directory: MonaServer2/UnitTests/Debug/
+            working-directory: UnitTests/
